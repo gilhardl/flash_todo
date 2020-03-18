@@ -1,4 +1,5 @@
 import 'package:flashtodo/constants.dart';
+import 'package:flashtodo/screens/tasks_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -12,9 +13,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: Center(
-        child: Text('hello'),
-      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => TasksScreen(),
+        '/tasks': (context) => TasksScreen(),
+      },
     );
   }
 }
