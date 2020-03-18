@@ -1,5 +1,6 @@
-import 'package:flashtodo/constants.dart';
 import 'package:flashtodo/models/task.dart';
+import 'package:flashtodo/screens/add_task_screen.dart';
+import 'package:flashtodo/widgets/tasks_list.dart';
 import 'package:flutter/material.dart';
 
 class TasksScreen extends StatefulWidget {
@@ -80,29 +81,13 @@ class _TasksScreenState extends State<TasksScreen> {
                 ),
               ),
               padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: _buildTasksList(),
+              child: TasksList(
+                tasks: tasks,
+              ),
             ),
           )
         ],
       ),
-    );
-  }
-
-  ListView _buildTasksList() {
-    return ListView(
-      children: tasks
-          .map((task) => ListTile(
-                title: Text(task.description),
-                trailing: Checkbox(
-                  value: task.done,
-                  onChanged: (value) {
-                    setState(() {
-                      task.done = value;
-                    });
-                  },
-                ),
-              ))
-          .toList(),
     );
   }
 }
