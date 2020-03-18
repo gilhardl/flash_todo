@@ -26,7 +26,12 @@ class _TasksScreenState extends State<TasksScreen> {
     return Scaffold(
       backgroundColor: _theme.primaryColor,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) => AddTaskScreen(),
+          );
+        },
         child: Icon(Icons.add),
       ),
       body: Column(
