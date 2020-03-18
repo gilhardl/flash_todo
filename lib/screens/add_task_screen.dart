@@ -23,46 +23,43 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             topRight: Radius.circular(24.0),
           ),
         ),
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        child: Padding(
-          padding: EdgeInsets.only(top: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Text(
-                'Add a task',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: _theme.primaryColor,
-                  fontSize: 24.0,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 8.0,
-                ),
-                child: TextField(
-                  controller: _controller,
-                  decoration: InputDecoration(hintText: 'New task description'),
-                  onChanged: (value) {
-                    description = value;
-                  },
-                ),
-              ),
-              FlatButton(
+        padding: EdgeInsets.all(32.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Text(
+              'Add a task',
+              textAlign: TextAlign.center,
+              style: TextStyle(
                 color: _theme.primaryColor,
-                onPressed: () {
-                  print(description);
+                fontSize: 24.0,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 8.0,
+              ),
+              child: TextField(
+                controller: _controller,
+                decoration: InputDecoration(hintText: 'New task description'),
+                onChanged: (value) {
+                  description = value;
                 },
-                child: Text(
-                  'Add',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+              ),
+            ),
+            FlatButton(
+              color: _theme.primaryColor,
+              onPressed: () {
+                print(description);
+              },
+              child: Text(
+                'Add',
+                style: TextStyle(
+                  color: Colors.white,
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );
