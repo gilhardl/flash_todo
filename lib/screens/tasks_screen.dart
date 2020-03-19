@@ -11,12 +11,12 @@ class TasksScreen extends StatefulWidget {
 class _TasksScreenState extends State<TasksScreen> {
   final tasksListName = 'Flash todo';
   final List<Task> tasks = [
-    Task(description: 'Milk'),
-    Task(description: 'Salad'),
-    Task(description: 'Tomato'),
-    Task(description: 'Patatoes'),
-    Task(description: 'Butter'),
-    Task(description: 'Cheese'),
+    Task(name: 'Milk'),
+    Task(name: 'Salad'),
+    Task(name: 'Tomato'),
+    Task(name: 'Patatoes'),
+    Task(name: 'Butter'),
+    Task(name: 'Cheese'),
   ];
 
   @override
@@ -92,8 +92,12 @@ class _TasksScreenState extends State<TasksScreen> {
               ),
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: TasksList(
-                tasks: tasks,
-              ),
+                  tasks: tasks,
+                  onTaskToggled: (index) {
+                    setState(() {
+                      tasks[index].toggle();
+                    });
+                  }),
             ),
           )
         ],

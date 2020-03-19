@@ -1,32 +1,51 @@
 import 'package:flashtodo/models/task.dart';
 import 'package:flutter/material.dart';
 
-class TasksList extends StatefulWidget {
-  TasksList({@required this.tasks});
+class TasksList extends StatelessWidget {
+  TasksList({
+    @required this.tasks,
+    @required this.onTaskToggled,
+  });
 
-  List<Task> tasks;
+  final List<Task> tasks;
+  final Function onTaskToggled;
 
-  @override
-  _TasksListState createState() => _TasksListState();
-}
-
-class _TasksListState extends State<TasksList> {
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: widget.tasks
-          .map((task) => ListTile(
-                title: Text(task.description),
-                trailing: Checkbox(
-                  value: task.done,
-                  onChanged: (value) {
-                    setState(() {
-                      task.done = value;
-                    });
-                  },
-                ),
-              ))
-          .toList(),
+    return ListView.builder(
+      itemBuilder: (context, i) {
+        return TaskTile(
+          taskName: tasks[i].name,
+          done: tasks[i].done,
+          onTaskToggled: (value) {
+            onTaskToggled(i);
+          },
+        );
+      },
+      itemCount: tasks.length,
+    );
+  }
+}
+
+class TaskTile extends StatelessWidget {
+  TaskTile({
+    @required this.taskName,
+    @required this.done,
+    @required this.onTaskToggled,
+  });
+
+  final String taskName;
+  final bool done;
+  final Function onTaskToggled;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(taskName),
+      trailing: Checkbox(
+        value: done,
+        onChanged: onTaskToggled,
+      ),
     );
   }
 }
