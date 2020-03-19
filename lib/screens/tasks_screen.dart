@@ -1,4 +1,3 @@
-import 'package:flashtodo/models/task.dart';
 import 'package:flashtodo/screens/add_task_screen.dart';
 import 'package:flashtodo/states/tasks_state.dart';
 import 'package:flashtodo/widgets/tasks_list.dart';

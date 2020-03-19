@@ -4,10 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AddTaskScreen extends StatefulWidget {
-  AddTaskScreen({@required this.onTaskSubmitted});
-
-  final Function onTaskSubmitted;
-
   @override
   _AddTaskScreenState createState() => _AddTaskScreenState();
 }

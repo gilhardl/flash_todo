@@ -59,8 +59,8 @@ class TasksState with ChangeNotifier {
     notifyListeners();
   }
 
-  removeTask(int index) {
-    tasks.removeAt(index);
+  removeTask(Task task) {
+    tasks.remove(task);
     _reorderTasks();
     notifyListeners();
   }
@@ -73,8 +73,8 @@ class TasksState with ChangeNotifier {
     notifyListeners();
   }
 
-  toggleTask(int index) {
-    tasks[index].toggle();
+  toggleTask(Task task) {
+    task.toggle();
     _reorderTasks();
     notifyListeners();
   }
@@ -84,8 +84,8 @@ class TasksState with ChangeNotifier {
     notifyListeners();
   }
 
-  toggleTaskSelection(int index) {
-    tasks[index].toggleSelection();
+  toggleTaskSelection(Task task) {
+    task.toggleSelection();
     notifyListeners();
   }
 

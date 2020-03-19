@@ -4,27 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class TasksList extends StatelessWidget {
-  void _onTaskToggled(TasksState tasksState, int index) {
+  void _onTaskToggled(TasksState tasksState, Task task) {
     if (!tasksState.selectionMode) {
-      tasksState.toggleTask(index);
+      tasksState.toggleTask(task);
     }
   }
 
-  void _onTaskLongPressed(TasksState tasksState, int index) {
-    if (!tasksState.selectionMode || tasksState.tasks[index].selected) {
+  void _onTaskLongPressed(TasksState tasksState, Task task) {
+    if (!tasksState.selectionMode || task.selected) {
       tasksState.toggleSelectionMode();
     }
     if (tasksState.selectionMode) {
-      tasksState.toggleTaskSelection(index);
+      tasksState.toggleTaskSelection(task);
     } else {
       tasksState.unselectAllTasks();
     }
   }
 
-  Function _onTaskPressed(TasksState tasksState, int index) {
+  Function _onTaskPressed(TasksState tasksState, Task task) {
     return tasksState.selectionMode
         ? () {
-            tasksState.toggleTaskSelection(index);
+            tasksState.toggleTaskSelection(task);
 
             if (tasksState.tasks.every((t) => !t.selected)) {
               tasksState.toggleSelectionMode();
@@ -43,9 +43,9 @@ class TasksList extends StatelessWidget {
           return TaskTile(
             taskName: task.name,
             done: task.done,
-            onChanged: (value) => _onTaskToggled(tasksState, i),
-            onLongPress: () => _onTaskLongPressed(tasksState, i),
-            onTap: _onTaskPressed(tasksState, i),
+            onChanged: (value) => _onTaskToggled(tasksState, task),
+            onLongPress: () => _onTaskLongPressed(tasksState, task),
+            onTap: _onTaskPressed(tasksState, task),
             selected: task.selected,
           );
         },
