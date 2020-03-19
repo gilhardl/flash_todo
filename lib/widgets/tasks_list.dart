@@ -4,45 +4,53 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class TasksList extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final TasksState tasksState = Provider.of<TasksState>(context);
+  void _onTaskToggled(TasksState tasksState, int index) {
+    if (!tasksState.selectionMode) {
+      tasksState.toggleTask(index);
+    }
+  }
 
-    return ListView.builder(
-      itemBuilder: (context, i) {
-        final task = tasksState.tasks[i];
+  void _onTaskLongPressed(TasksState tasksState, int index) {
+    if (!tasksState.selectionMode || tasksState.tasks[index].selected) {
+      tasksState.toggleSelectionMode();
+    }
+    if (tasksState.selectionMode) {
+      tasksState.toggleTaskSelection(index);
+    } else {
+      tasksState.unselectAllTasks();
+    }
+  }
 
-        return TaskTile(
-          taskName: task.name,
-          done: task.done,
-          onChanged: (value) {
-            if (!tasksState.selectionMode) {
-              tasksState.toggleTask(i);
-            }
-          },
-          onLongPress: () {
-            if (!tasksState.selectionMode || task.selected) {
+  Function _onTaskPressed(TasksState tasksState, int index) {
+    return tasksState.selectionMode
+        ? () {
+            tasksState.toggleTaskSelection(index);
+
+            if (tasksState.tasks.every((t) => !t.selected)) {
               tasksState.toggleSelectionMode();
             }
-            if (tasksState.selectionMode) {
-              tasksState.toggleTaskSelection(i);
-            } else {
-              tasksState.unselectAllTasks();
-            }
-          },
-          onTap: tasksState.selectionMode
-              ? () {
-                  tasksState.toggleTaskSelection(i);
+          }
+        : null;
+  }
 
-                  if (tasksState.tasks.every((t) => !t.selected)) {
-                    tasksState.toggleSelectionMode();
-                  }
-                }
-              : null,
-          selected: task.selected,
-        );
-      },
-      itemCount: tasksState.tasks.length,
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<TasksState>(
+      builder: (context, tasksState, child) => ListView.builder(
+        itemBuilder: (context, i) {
+          final task = tasksState.tasks[i];
+
+          return TaskTile(
+            taskName: task.name,
+            done: task.done,
+            onChanged: (value) => _onTaskToggled(tasksState, i),
+            onLongPress: () => _onTaskLongPressed(tasksState, i),
+            onTap: _onTaskPressed(tasksState, i),
+            selected: task.selected,
+          );
+        },
+        itemCount: tasksState.tasks.length,
+      ),
     );
   }
 }
@@ -79,7 +87,7 @@ class TaskTile extends StatelessWidget {
         ),
         trailing: Checkbox(
           value: done,
-          onChanged: !done ? onChanged : null,
+          onChanged: onChanged,
         ),
         selected: selected,
         onLongPress: onLongPress,

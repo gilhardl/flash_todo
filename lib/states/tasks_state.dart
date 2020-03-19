@@ -1,9 +1,33 @@
 import 'package:flashtodo/models/task.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 class TasksState with ChangeNotifier {
   List<Task> tasks = [];
   bool selectionMode = false;
+
+  int get tasksCount {
+    return tasks.length;
+  }
+
+  int get tasksTodoCount {
+    return tasksTodo.length;
+  }
+
+  int get tasksDoneCount {
+    return tasksDone.length;
+  }
+
+  List<Task> get selectedTasks {
+    return tasks.where((task) => task.selected).toList();
+  }
+
+  List<Task> get tasksTodo {
+    return tasks.where((task) => !task.done).toList();
+  }
+
+  List<Task> get tasksDone {
+    return tasks.where((task) => task.done).toList();
+  }
 
   _reorderTasks() {
     tasks.sort((taskA, taskB) {
@@ -42,7 +66,6 @@ class TasksState with ChangeNotifier {
   }
 
   removeSelectedTasks() {
-    final selectedTasks = tasks.where((task) => task.selected).toList();
     for (var task in selectedTasks) {
       tasks.remove(task);
     }
@@ -67,7 +90,6 @@ class TasksState with ChangeNotifier {
   }
 
   selectAllTasks() {
-    final selectedTasks = tasks.where((task) => task.selected).toList();
     for (var task in selectedTasks) {
       task.selected = true;
     }
@@ -75,7 +97,6 @@ class TasksState with ChangeNotifier {
   }
 
   unselectAllTasks() {
-    final selectedTasks = tasks.where((task) => task.selected).toList();
     for (var task in selectedTasks) {
       task.selected = false;
     }
