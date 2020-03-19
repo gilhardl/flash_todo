@@ -1,13 +1,24 @@
+import 'package:flashtodo/models/task.dart';
 import 'package:flutter/material.dart';
 
 class AddTaskScreen extends StatefulWidget {
+  AddTaskScreen({@required this.onTaskSubmitted});
+
+  final Function onTaskSubmitted;
+
   @override
   _AddTaskScreenState createState() => _AddTaskScreenState();
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
   TextEditingController _controller = TextEditingController();
-  String description;
+  String taskName;
+
+  void _submitNewTask() {
+    widget.onTaskSubmitted(Task(
+      name: taskName,
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,18 +51,18 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 vertical: 8.0,
               ),
               child: TextField(
+                autofocus: true,
                 controller: _controller,
                 decoration: InputDecoration(hintText: 'New task description'),
                 onChanged: (value) {
-                  description = value;
+                  taskName = value;
                 },
+                onSubmitted: (value) => _submitNewTask(),
               ),
             ),
             FlatButton(
               color: _theme.primaryColor,
-              onPressed: () {
-                print(description);
-              },
+              onPressed: () => _submitNewTask(),
               child: Text(
                 'Add',
                 style: TextStyle(
