@@ -1,7 +1,9 @@
 import 'package:flashtodo/models/task.dart';
 import 'package:flashtodo/screens/add_task_screen.dart';
+import 'package:flashtodo/states/tasks_state.dart';
 import 'package:flashtodo/widgets/tasks_list.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TasksScreen extends StatefulWidget {
   @override
@@ -10,39 +12,43 @@ class TasksScreen extends StatefulWidget {
 
 class _TasksScreenState extends State<TasksScreen> {
   final tasksListName = 'Flash todo';
-  final List<Task> tasks = [
-    Task(name: 'Milk'),
-    Task(name: 'Salad'),
-    Task(name: 'Tomato'),
-    Task(name: 'Patatoes'),
-    Task(name: 'Butter'),
-    Task(name: 'Cheese'),
-  ];
 
   @override
   Widget build(BuildContext context) {
-    ThemeData _theme = Theme.of(context);
+    final TasksState tasksState = Provider.of<TasksState>(context);
+    final ThemeData _theme = Theme.of(context);
+
+    void _presentAddTaskModalBottomSheet() {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) => SingleChildScrollView(
+          child: AddTaskScreen(onTaskSubmitted: (newTask) {
+            setState(() {
+              tasksState.tasks.add(newTask);
+            });
+            Navigator.pop(context);
+          }),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        ),
+      );
+    }
+
+    void _removeSelectedTasks() {
+      tasksState.removeSelectedTasks();
+      tasksState.toggleSelectionMode();
+    }
 
     return Scaffold(
       backgroundColor: _theme.primaryColor,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            builder: (context) => SingleChildScrollView(
-              child: AddTaskScreen(onTaskSubmitted: (newTask) {
-                setState(() {
-                  tasks.add(newTask);
-                });
-                Navigator.pop(context);
-              }),
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-            ),
-          );
+          !tasksState.selectionMode
+              ? _presentAddTaskModalBottomSheet()
+              : _removeSelectedTasks();
         },
-        child: Icon(Icons.add),
+        child: !tasksState.selectionMode ? Icon(Icons.add) : Icon(Icons.delete),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,7 +84,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   ),
                 ),
                 Text(
-                  '${tasks.length} tasks',
+                  '${tasksState.tasks.length} tasks - ${tasksState.tasks.where((task) => !task.done).length} to do',
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -96,13 +102,14 @@ class _TasksScreenState extends State<TasksScreen> {
                 ),
               ),
               padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: TasksList(
-                  tasks: tasks,
-                  onTaskToggled: (index) {
-                    setState(() {
-                      tasks[index].toggle();
-                    });
-                  }),
+//              child: TasksList(
+//                  tasks: tasksState.tasks,
+//                  onTaskToggled: (index) {
+//                    setState(() {
+//                      tasks[index].toggle();
+//                    });
+//                  }),
+              child: TasksList(),
             ),
           )
         ],

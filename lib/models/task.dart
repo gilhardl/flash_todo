@@ -5,6 +5,7 @@ class Task {
     @required this.name,
     this.description = '',
     this.done = false,
+    this.selected = false,
   }) : createdAt = DateTime.now();
 
   String name;
@@ -12,7 +13,13 @@ class Task {
   bool done;
   DateTime createdAt;
 
+  bool selected;
+
   void toggle() {
     done = !done;
+  }
+
+  void toggleSelection() {
+    selected = !selected;
   }
 }
